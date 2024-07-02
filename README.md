@@ -1,3 +1,7 @@
+由于没找到高德官方仓库就直接用了pub.dev上的做二次开发。
+主要增加的功能如下：
+- 定位图标旋转
+
 # amap_flutter_map
 
 基于[高德开放平台地图SDK](https://lbs.amap.com/api/)的flutter插件
