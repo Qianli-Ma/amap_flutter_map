@@ -126,6 +126,33 @@ enum MyLocationStyle {
   mapRotateNoCenter,
 }
 
+class Anchor {
+  final double dx;
+  final double dy;
+
+  const Anchor(this.dx, this.dy);
+
+  dynamic toMap() {
+    return <dynamic>[dx, dy];
+  }
+
+  // @override
+  // bool operator ==(Object other) {
+  //   if (identical(this, other)) return true;
+  //   if (runtimeType != other.runtimeType) return false;
+  //   final Anchor typedOther = other;
+  //   return dx == typedOther.dx && dy == typedOther.dy;
+  // }
+
+  @override
+  int get hashCode => hashValues(dx, dy);
+
+  @override
+  String toString() {
+    return 'Anchor(dx: $dx, dy: $dy)';
+  }
+}
+
 ///定位小蓝点配置项
 class MyLocationStyleOptions {
   ///是否显示定位小蓝点
@@ -149,6 +176,9 @@ class MyLocationStyleOptions {
   // 定位间隔
   int? interval;
 
+  /// 定位小蓝点的锚点
+  Anchor? anchor;
+
   MyLocationStyleOptions(
   this.enabled, {
     this.circleFillColor,
@@ -157,6 +187,7 @@ class MyLocationStyleOptions {
     this.icon,
     this.trackingMode,
     this.interval,
+    this.anchor,
   });
 
   MyLocationStyleOptions clone() {
@@ -168,6 +199,7 @@ class MyLocationStyleOptions {
       icon: icon,
       trackingMode: trackingMode,
       interval: interval,
+      anchor: anchor,
     );
   }
 
@@ -183,6 +215,7 @@ class MyLocationStyleOptions {
       icon: json['icon'] ?? null,
       trackingMode: json['trackingMode'] ?? null,
       interval: json['interval'] ?? null,
+      anchor: json['anchor'] ?? null,
     );
   }
 
@@ -202,6 +235,7 @@ class MyLocationStyleOptions {
     addIfPresent('icon', icon?.toMap());
     addIfPresent('trackingMode', trackingMode?.index);
     addIfPresent('interval', interval);
+    addIfPresent('anchor', anchor?.toMap());
     return json;
   }
 
@@ -216,7 +250,8 @@ class MyLocationStyleOptions {
         circleStrokeColor == typedOther.circleStrokeColor &&
         icon == typedOther.icon &&
         trackingMode == typedOther.trackingMode &&
-        interval == typedOther.interval;
+        interval == typedOther.interval &&
+        anchor == typedOther.anchor;
   }
 
   @override
@@ -227,12 +262,13 @@ class MyLocationStyleOptions {
         'circleStrokeColor: $circleStrokeColor,'
         'icon: $icon,'
         'trackingMode: $trackingMode,'
-        'interval: $interval, }';
+        'interval: $interval,'
+        'anchor: $anchor }';
   }
 
   @override
   int get hashCode =>
-      hashValues(enabled, circleFillColor, circleStrokeColor, icon, trackingMode, interval, );
+      hashValues(enabled, circleFillColor, circleStrokeColor, icon, trackingMode, interval, anchor);
 }
 
 ///地图自定义样式

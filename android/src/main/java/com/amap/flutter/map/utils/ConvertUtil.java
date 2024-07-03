@@ -297,7 +297,16 @@ public class ConvertUtil {
         return customMapStyleOptions;
     }
 
-    private static final int[] LocationTypeMap = new int[]{MyLocationStyle.LOCATION_TYPE_SHOW, MyLocationStyle.LOCATION_TYPE_FOLLOW, MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE};
+    private static final int[] LocationTypeMap = new int[]{
+        MyLocationStyle.LOCATION_TYPE_SHOW,
+        MyLocationStyle.LOCATION_TYPE_LOCATE,
+        MyLocationStyle.LOCATION_TYPE_FOLLOW,
+        MyLocationStyle.LOCATION_TYPE_MAP_ROTATE,
+        MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE,
+        MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER,
+        MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER,
+        MyLocationStyle.LOCATION_TYPE_MAP_ROTATE_NO_CENTER
+    };
 
     private static MyLocationStyle toMyLocationStyle(Object o, float density) {
         final Map<?, ?> map = toMap(o);
@@ -336,6 +345,13 @@ public class ConvertUtil {
         final Object iconDta = map.get("icon");
         if (null != iconDta) {
             myLocationStyle.myLocationIcon(toBitmapDescriptor(iconDta));
+        }
+
+        final Object anchorDta = map.get("anchor");
+        if (null != anchorDta) {
+            System.out.println("anchorDta:" + anchorDta);
+            final List<?> anchorData = toList(anchorDta);
+            myLocationStyle.anchor(toFloat(anchorData.get(0)), toFloat(anchorData.get(1)));
         }
         return myLocationStyle;
     }
