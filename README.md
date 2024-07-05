@@ -1,4 +1,5 @@
 由于没找到高德官方仓库就直接用了pub.dev上的做二次开发。
+特别感谢 [lytian/amap_flutter_map](https://github.com/lytian/amap_flutter_map)
 主要增加的功能如下：
 - 定位图标旋转
 
