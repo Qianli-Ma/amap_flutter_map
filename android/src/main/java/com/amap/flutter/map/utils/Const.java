@@ -37,6 +37,12 @@ public class Const {
     public static final String[] METHOD_ID_LIST_FOR_MARKER = {METHOD_MARKER_UPDATE};
 
     /**
+     * circles
+     */
+    public static final String METHOD_CIRCLE_UPDATE = "circles#update";
+    public static final String[] METHOD_ID_LIST_FOR_CIRCLE = {METHOD_CIRCLE_UPDATE};
+
+    /**
      * polygons
      */
     public static final String METHOD_POLYGON_UPDATE = "polygons#update";

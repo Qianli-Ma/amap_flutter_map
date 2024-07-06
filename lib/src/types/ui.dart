@@ -175,7 +175,7 @@ class MyLocationStyleOptions {
 
   // 定位间隔
   int? interval;
-
+0
   /// 定位小蓝点的锚点
   Anchor? anchor;
 
