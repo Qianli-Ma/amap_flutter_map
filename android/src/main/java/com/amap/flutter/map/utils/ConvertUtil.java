@@ -315,23 +315,12 @@ public class ConvertUtil {
         if (null != enableData) {
             myLocationStyle.showMyLocation(toBoolean(enableData));
         }
-        //两端差异比较大，Android端设置成跟随但是不移动到中心点模式，与iOS端兼容
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER);
-        final Object trackingMode = map.get("trackingMode");
-        if (null != trackingMode) {
-            int trackingModeIndex = toInt(trackingMode);
-            if (trackingModeIndex < LocationTypeMap.length) {
-                myLocationStyle.myLocationType(LocationTypeMap[trackingModeIndex]);
-            }
-        }
-        final Object interval = map.get("interval");
-        if (null != interval) {
-            myLocationStyle.interval(toInt(interval));
-        }
+
         final Object circleFillColorData = map.get("circleFillColor");
         if (null != circleFillColorData) {
             myLocationStyle.radiusFillColor(toInt(circleFillColorData));
         }
+
         final Object circleStrokeColorData = map.get("circleStrokeColor");
         if (null != circleStrokeColorData) {
             myLocationStyle.strokeColor(toInt(circleStrokeColorData));
@@ -345,6 +334,21 @@ public class ConvertUtil {
         final Object iconDta = map.get("icon");
         if (null != iconDta) {
             myLocationStyle.myLocationIcon(toBitmapDescriptor(iconDta));
+        }
+
+        //两端差异比较大，Android端设置成跟随但是不移动到中心点模式，与iOS端兼容
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER);
+        final Object trackingMode = map.get("trackingMode");
+        if (null != trackingMode) {
+            int trackingModeIndex = toInt(trackingMode);
+            if (trackingModeIndex < LocationTypeMap.length) {
+                myLocationStyle.myLocationType(LocationTypeMap[trackingModeIndex]);
+            }
+        }
+
+        final Object interval = map.get("interval");
+        if (null != interval) {
+            myLocationStyle.interval(toInt(interval));
         }
 
         final Object anchorDta = map.get("anchor");
