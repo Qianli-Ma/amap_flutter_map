@@ -65,6 +65,9 @@ class AMapWidget extends StatefulWidget {
   /// 地图上显示的polygon
   final Set<Polygon> polygons;
 
+  /// 地图上显示的circle
+  final Set<Circle> circles;
+
   /// 地图创建成功的回调, 收到此回调之后才可以操作地图
   final MapCreatedCallback? onMapCreated;
 
@@ -92,7 +95,8 @@ class AMapWidget extends StatefulWidget {
   ///高德合规声明配置
   ///
   /// 高德SDK合规使用方案请参考：https://lbs.amap.com/news/sdkhgsy
-  final AMapPrivacyStatement ?privacyStatement;
+  final AMapPrivacyStatement? privacyStatement;
+
   /// 创建一个展示高德地图的widget
   ///
   /// 如果使用的高德地图SDK的版本是8.1.0及以上版本，
@@ -109,7 +113,8 @@ class AMapWidget extends StatefulWidget {
     Key? key,
     this.privacyStatement,
     this.apiKey,
-    this.initialCameraPosition = const CameraPosition(target: LatLng(39.909187, 116.397451), zoom: 10),
+    this.initialCameraPosition =
+        const CameraPosition(target: LatLng(39.909187, 116.397451), zoom: 10),
     this.mapType = MapType.normal,
     this.buildingsEnabled = true,
     this.compassEnabled = false,
@@ -136,6 +141,7 @@ class AMapWidget extends StatefulWidget {
     this.markers = const <Marker>{},
     this.polylines = const <Polyline>{},
     this.polygons = const <Polygon>{},
+    this.circles = const <Circle>{},
   }) : super(key: key);
 
   ///
@@ -147,6 +153,7 @@ class _MapState extends State<AMapWidget> {
   Map<String, Marker> _markers = <String, Marker>{};
   Map<String, Polyline> _polylines = <String, Polyline>{};
   Map<String, Polygon> _polygons = <String, Polygon>{};
+  Map<String, Circle> _circles = <String, Circle>{};
 
   final Completer<AMapController> _controller = Completer<AMapController>();
   late _AMapOptions _mapOptions;
@@ -162,6 +169,7 @@ class _MapState extends State<AMapWidget> {
       'markersToAdd': serializeOverlaySet(widget.markers),
       'polylinesToAdd': serializeOverlaySet(widget.polylines),
       'polygonsToAdd': serializeOverlaySet(widget.polygons),
+      'circlesToAdd': serializeOverlaySet(widget.circles),
     };
     Widget mapView = _methodChannel.buildView(
       creationParams,
@@ -178,6 +186,7 @@ class _MapState extends State<AMapWidget> {
     _markers = keyByMarkerId(widget.markers);
     _polygons = keyByPolygonId(widget.polygons);
     _polylines = keyByPolylineId(widget.polylines);
+    _circles = keyByCircleId(widget.circles);
     print('initState AMapWidget');
   }
 
@@ -208,6 +217,7 @@ class _MapState extends State<AMapWidget> {
     _updateMarkers();
     _updatePolylines();
     _updatePolygons();
+    _updateCircles();
   }
 
   Future<void> onPlatformViewCreated(int id) async {
@@ -268,20 +278,29 @@ class _MapState extends State<AMapWidget> {
   void _updateMarkers() async {
     final AMapController controller = await _controller.future;
     // ignore: unawaited_futures
-    controller._updateMarkers(MarkerUpdates.from(_markers.values.toSet(), widget.markers));
+    controller._updateMarkers(
+        MarkerUpdates.from(_markers.values.toSet(), widget.markers));
     _markers = keyByMarkerId(widget.markers);
   }
 
   void _updatePolylines() async {
     final AMapController controller = await _controller.future;
-    controller._updatePolylines(PolylineUpdates.from(_polylines.values.toSet(), widget.polylines));
+    controller._updatePolylines(
+        PolylineUpdates.from(_polylines.values.toSet(), widget.polylines));
     _polylines = keyByPolylineId(widget.polylines);
   }
 
   void _updatePolygons() async {
     final AMapController controller = await _controller.future;
-    controller._updatePolygons(PolygonUpdates.from(_polygons.values.toSet(), widget.polygons));
+    controller._updatePolygons(
+        PolygonUpdates.from(_polygons.values.toSet(), widget.polygons));
     _polygons = keyByPolygonId(widget.polygons);
+  }
+
+  void _updateCircles() async {
+    final AMapController controller = await _controller.future;
+    controller._updateCircles(CircleUpdates.from(_circles.values.toSet(), widget.circles));
+    _circles = keyByCircleId(widget.circles);
   }
 }
 
@@ -400,7 +419,8 @@ class _AMapOptions {
     final Map<String, dynamic> prevOptionsMap = toMap();
 
     return newOptions.toMap()
-      ..removeWhere((String key, dynamic value) => (_checkChange(key, prevOptionsMap[key], value)));
+      ..removeWhere((String key, dynamic value) =>
+          (_checkChange(key, prevOptionsMap[key], value)));
   }
 
   bool _checkChange(String key, dynamic preValue, dynamic newValue) {
