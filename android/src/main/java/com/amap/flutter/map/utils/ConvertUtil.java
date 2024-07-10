@@ -208,6 +208,7 @@ public class ConvertUtil {
 
             final Object myLocationStyleData = data.get("myLocationStyle");
             if (null != myLocationStyleData) {
+                LogUtil.i(CLASS_NAME, "interpretAMapOptions myLocationStyleData = " + myLocationStyleData);
                 sink.setMyLocationStyle(ConvertUtil.toMyLocationStyle(myLocationStyleData, density));
             }
 
@@ -311,6 +312,7 @@ public class ConvertUtil {
 
     private static MyLocationStyle toMyLocationStyle(Object o, float density) {
         final Map<?, ?> map = toMap(o);
+        LogUtil.i(CLASS_NAME, "toMyLocationStyle map = " + map);
         final MyLocationStyle myLocationStyle = new MyLocationStyle();
         final Object enableData = map.get("enabled");
         if (null != enableData) {
