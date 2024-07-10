@@ -158,6 +158,9 @@ class MyLocationStyleOptions {
   ///是否显示定位小蓝点
   bool enabled;
 
+  ///精度圈呼吸效果
+  bool? circlePulseAnimation;
+
   ///精度圈填充色
   Color? circleFillColor;
 
@@ -181,6 +184,7 @@ class MyLocationStyleOptions {
 
   MyLocationStyleOptions(
   this.enabled, {
+    this.circlePulseAnimation,
     this.circleFillColor,
     this.circleStrokeColor,
     this.circleStrokeWidth,
@@ -193,6 +197,7 @@ class MyLocationStyleOptions {
   MyLocationStyleOptions clone() {
     return MyLocationStyleOptions(
       enabled,
+      circlePulseAnimation: circlePulseAnimation,
       circleFillColor: circleFillColor,
       circleStrokeColor: circleStrokeColor,
       circleStrokeWidth: circleStrokeWidth,
@@ -209,6 +214,7 @@ class MyLocationStyleOptions {
     }
     return MyLocationStyleOptions(
       json['enabled'] ?? false,
+      circlePulseAnimation: json['circlePulseAnimation'] ?? null,
       circleFillColor: json['circleFillColor'] ?? null,
       circleStrokeColor: json['circleStrokeColor'] ?? null,
       circleStrokeWidth: json['circleStrokeWidth'] ?? null,
@@ -229,6 +235,7 @@ class MyLocationStyleOptions {
     }
 
     addIfPresent('enabled', enabled);
+    addIfPresent('circlePulseAnimation', circlePulseAnimation);
     addIfPresent('circleFillColor', circleFillColor?.value);
     addIfPresent('circleStrokeColor', circleStrokeColor?.value);
     addIfPresent('circleStrokeWidth', circleStrokeWidth);
@@ -246,6 +253,7 @@ class MyLocationStyleOptions {
     if (other is !MyLocationStyleOptions) return false;
     final MyLocationStyleOptions typedOther = other;
     return enabled == typedOther.enabled &&
+        circlePulseAnimation == typedOther.circlePulseAnimation &&
         circleFillColor == typedOther.circleFillColor &&
         circleStrokeColor == typedOther.circleStrokeColor &&
         icon == typedOther.icon &&
@@ -258,6 +266,7 @@ class MyLocationStyleOptions {
   String toString() {
     return 'MyLocationOptionsStyle{'
         'enabled: $enabled,'
+        'circlePulseAnimation: $circlePulseAnimation,'
         'circleFillColor: $circleFillColor,'
         'circleStrokeColor: $circleStrokeColor,'
         'icon: $icon,'
@@ -268,7 +277,16 @@ class MyLocationStyleOptions {
 
   @override
   int get hashCode =>
-      hashValues(enabled, circleFillColor, circleStrokeColor, icon, trackingMode, interval, anchor);
+      hashValues(
+          enabled,
+          circlePulseAnimation,
+          circleFillColor,
+          circleStrokeColor,
+          icon,
+          trackingMode,
+          interval,
+          anchor
+        );
 }
 
 ///地图自定义样式

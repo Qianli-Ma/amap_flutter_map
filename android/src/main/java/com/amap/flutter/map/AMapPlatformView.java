@@ -13,6 +13,7 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.TextureMapView;
 import com.amap.flutter.map.core.MapController;
+import com.amap.flutter.map.overlays.circle.AnimatedLocationCircleUtil;
 import com.amap.flutter.map.overlays.circle.CirclesController;
 import com.amap.flutter.map.overlays.marker.MarkersController;
 import com.amap.flutter.map.overlays.polygon.PolygonsController;
@@ -49,6 +50,7 @@ public class AMapPlatformView
     private PolylinesController polylinesController;
     private PolygonsController polygonsController;
     private CirclesController circlesController;
+    private AnimatedLocationCircleUtil animatedLocationCircleUtil;
 
     private TextureMapView mapView;
 
@@ -74,6 +76,7 @@ public class AMapPlatformView
             polylinesController = new PolylinesController(methodChannel, amap);
             polygonsController = new PolygonsController(methodChannel, amap);
             circlesController = new CirclesController(methodChannel, amap);
+            animatedLocationCircleUtil = AnimatedLocationCircleUtil.getInstance(amap);
             initMyMethodCallHandlerMap();
             lifecycleProvider.getLifecycle().addObserver(this);
         } catch (Throwable e) {

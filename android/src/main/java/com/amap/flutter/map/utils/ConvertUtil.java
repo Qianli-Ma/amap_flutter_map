@@ -20,6 +20,7 @@ import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Poi;
 import com.amap.flutter.map.core.AMapOptionsSink;
+import com.amap.flutter.map.overlays.circle.AnimatedLocationCircleUtil;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -316,19 +317,29 @@ public class ConvertUtil {
             myLocationStyle.showMyLocation(toBoolean(enableData));
         }
 
+        final Object circlePulseAnimationData = map.get("circlePulseAnimation");
         final Object circleFillColorData = map.get("circleFillColor");
-        if (null != circleFillColorData) {
-            myLocationStyle.radiusFillColor(toInt(circleFillColorData));
-        }
-
         final Object circleStrokeColorData = map.get("circleStrokeColor");
-        if (null != circleStrokeColorData) {
-            myLocationStyle.strokeColor(toInt(circleStrokeColorData));
-        }
-
         final Object circleStrokeWidthData = map.get("circleStrokeWidth");
-        if (null != circleStrokeWidthData) {
-            myLocationStyle.strokeWidth(toPixels(circleStrokeWidthData));
+        if (null != circlePulseAnimationData) {
+            AnimatedLocationCircleUtil.getInstance(null).animatedLocationCircle(
+                toBoolean(circlePulseAnimationData),
+                toInt(circleFillColorData),
+                toInt(circleStrokeColorData),
+                toPixels(circleStrokeWidthData)
+                );
+        }
+        else
+        {
+            if (null != circleFillColorData) {
+                myLocationStyle.radiusFillColor(toInt(circleFillColorData));
+            }
+            if (null != circleStrokeColorData) {
+                myLocationStyle.strokeColor(toInt(circleStrokeColorData));
+            }
+            if (null != circleStrokeWidthData) {
+                myLocationStyle.strokeWidth(toPixels(circleStrokeWidthData));
+            }
         }
 
         final Object iconDta = map.get("icon");

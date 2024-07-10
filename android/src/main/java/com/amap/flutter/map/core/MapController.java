@@ -17,6 +17,7 @@ import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Poi;
 import com.amap.flutter.map.MyMethodCallHandler;
+import com.amap.flutter.map.overlays.circle.AnimatedLocationCircleUtil;
 import com.amap.flutter.map.utils.Const;
 import com.amap.flutter.map.utils.ConvertUtil;
 import com.amap.flutter.map.utils.LogUtil;
@@ -277,6 +278,7 @@ public class MapController
 
     @Override
     public void onMyLocationChange(Location location) {
+        AnimatedLocationCircleUtil.getInstance(amap).updateAnimatedLocationCircle(ConvertUtil.location2Map(location));
         if (null != methodChannel && myLocationShowing) {
             final Map<String, Object> arguments = new HashMap<String, Object>(2);
             arguments.put("location", ConvertUtil.location2Map(location));
