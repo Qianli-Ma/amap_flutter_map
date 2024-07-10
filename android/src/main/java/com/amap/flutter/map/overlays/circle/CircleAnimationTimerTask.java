@@ -19,9 +19,10 @@ import java.util.TimerTask;
 public class CircleAnimationTimerTask extends TimerTask {
 
     private static final String TAG = "CircleAnimation";
+
     private final Interpolator linearInterpolator = new LinearInterpolator();
     private final Circle circle;
-    private final float targetRadius;
+    private float targetRadius;
     private long startTime;
     private long duration = 2000;
 
@@ -35,15 +36,17 @@ public class CircleAnimationTimerTask extends TimerTask {
         this.startTime = SystemClock.uptimeMillis();
     }
 
+    public void setRadius(float radius) {
+        this.targetRadius = radius;
+    }
+
     @Override
     public void run() {
         try {
-            LogUtil.i(TAG, "run: ");
             long elapsed = SystemClock.uptimeMillis() - this.startTime;
             float input = (float) elapsed / this.duration;
             float t = linearInterpolator.getInterpolation(input);
-            double newRadius = 1 + t * (targetRadius - 1);
-            // Log.d(TAG, "run: newRadius = " + newRadius);
+            double newRadius = 1 + t * (this.targetRadius - 1);
             circle.setRadius(newRadius);
             if (newRadius >= this.targetRadius) {
                 this.startTime = SystemClock.uptimeMillis(); // Reset the start time for a new animation cycle

@@ -26,6 +26,7 @@ public class AnimatedLocationCircleUtil {
     private int circleStrokeColor;
     private int circleStrokeWidth;
     private boolean isCircleVisible = false;
+    private CircleAnimationTimerTask myLocationCircleAnimationTask;
     private final Timer myLocationCircleAnimationTimer = new Timer();
 
     public AnimatedLocationCircleUtil(AMap amap) {
@@ -43,6 +44,7 @@ public class AnimatedLocationCircleUtil {
     }
 
     public void animatedLocationCircle(boolean animateLocationCircle, int circleFillColor, int circleStrokeColor, int circleStrokeWidth) {
+
         this.isCircleVisible = animateLocationCircle;
         if (animateLocationCircle) {
             addAnimatedLocationCircle(circleFillColor, circleStrokeColor, circleStrokeWidth);
@@ -69,6 +71,7 @@ public class AnimatedLocationCircleUtil {
                     double latitude = (Double) latLngList.get(0);
                     double longitude = (Double) latLngList.get(1);
                     LatLng latLng = new LatLng(latitude, longitude);
+                    LogUtil.i(CLASS_NAME, "myLocationCircle " + myLocationCircle + " latLng = " + latLng + " accuracy = " + accuracy);
                     if (myLocationCircle == null) {
                         myLocationCircle = amap.addCircle(new CircleOptions()
                                 .center(latLng)
@@ -76,7 +79,7 @@ public class AnimatedLocationCircleUtil {
                                 .fillColor(circleFillColor)
                                 .strokeColor(circleStrokeColor)
                                 .strokeWidth(circleStrokeWidth));
-                        int reducedAlpha = Color.alpha(circleFillColor) - 50;
+                        int reducedAlpha = Color.alpha(circleFillColor) - 1;
                         if (reducedAlpha < 0) {
                             reducedAlpha = 0;
                         }
@@ -87,16 +90,18 @@ public class AnimatedLocationCircleUtil {
                         myLocationCircleOuter = amap.addCircle(new CircleOptions()
                                 .center(latLng)
                                 .radius(0)
-                                .fillColor(Color.TRANSPARENT)
-                                .strokeColor(reducedFillColor)
+                                .fillColor(reducedFillColor)
+                                .strokeColor(circleStrokeColor)
                                 .strokeWidth(circleStrokeWidth));
+                        LogUtil.i(CLASS_NAME, "myLocationCircleOuter " + myLocationCircleOuter + " A" + reducedAlpha + " R" + Color.red(circleFillColor) + " G" + Color.green(circleFillColor) + " B" + Color.blue(circleFillColor));
+                        animateCircle(myLocationCircleOuter, accuracy);
                     } else {
                         myLocationCircle.setCenter(latLng);
                         myLocationCircle.setRadius(1);
                         myLocationCircleOuter.setCenter(latLng);
-                        myLocationCircleOuter.setRadius(1);
+                        myLocationCircleAnimationTask.setRadius(accuracy);
+
                     }
-                    animateCircle(myLocationCircleOuter, accuracy);
                 }
             }
         }
@@ -105,7 +110,7 @@ public class AnimatedLocationCircleUtil {
     private void animateCircle(final Circle circle, final float accuracy) {
         LogUtil.i(CLASS_NAME, "animateCircle: accuracy = " + accuracy);
         if (circle != null) {
-            TimerTask myLocationCircleAnimationTask = new CircleAnimationTimerTask(circle, accuracy, 1000);
+            myLocationCircleAnimationTask = new CircleAnimationTimerTask(circle, accuracy, 1000);
             myLocationCircleAnimationTimer.schedule(myLocationCircleAnimationTask, 0, 30);
         }
     }
